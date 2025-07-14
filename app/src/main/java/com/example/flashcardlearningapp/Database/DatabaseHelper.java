@@ -1,8 +1,53 @@
 package com.example.flashcardlearningapp.Database;
 
-import android.content.ContentValues; import android.content.Context; import android.database.Cursor; import android.database.sqlite.SQLiteDatabase; import android.database.sqlite.SQLiteOpenHelper;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHelper extends SQLiteOpenHelper { private static final String DATABASE_NAME = "UserDB.db"; private static final int DATABASE_VERSION = 1; private static final String TABLE_USERS = "users"; private static final String COLUMN_ID = "id"; private static final String COLUMN_USERNAME = "user_email"; private static final String COLUMN_PASSWORD = "password"; private static final String COLUMN_EMAIL = "email";
+public class DatabaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "FlashcardDB";
+    private static final int DATABASE_VERSION = 1;
+
+    // Table for user accounts with Google login
+    public static final String TABLE_USERS = "users";
+    public static final String COLUMN_USER_ID = "user_id";
+    public static final String COLUMN_USER_MAIL = "user_mail";
+    public static final String COLUMN_PASSWORD = "password";
+
+    // Table for flashcard metadata
+    public static final String TABLE_FLASHCARD = "flashcard";
+    public static final String COLUMN_FLASHCARD_ID = "flashcard_id";
+    public static final String COLUMN_USER_ID_FK = "user_id";
+    public static final String COLUMN_TITLE = "title";
+    public static final String COLUMN_CREATION_TIME = "creation_time";
+    public static final String COLUMN_ACCESS_COUNT = "access_count";
+
+    // Table for flashcard questions and answers
+    public static final String TABLE_FLASHCARD_CONTENT = "flashcard_content";
+    public static final String COLUMN_CONTENT_ID = "content_id";
+    public static final String COLUMN_FLASHCARD_ID_FK = "flashcard_id";
+    public static final String COLUMN_QUESTION = "question";
+    public static final String COLUMN_ANSWER = "answer";
+
+    private static final String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + " (" +
+            COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_USER_MAIL + " TEXT NOT NULL UNIQUE, " +
+            COLUMN_PASSWORD + " TEXT NOT NULL)";
+
+    private static final String CREATE_FLASHCARD_TABLE = "CREATE TABLE " + TABLE_FLASHCARD + " (" +
+            COLUMN_FLASHCARD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_USER_ID_FK + " INTEGER, " +
+            COLUMN_TITLE + " TEXT NOT NULL, " +
+            COLUMN_CREATION_TIME + " TEXT, " +
+            COLUMN_ACCESS_COUNT + " INTEGER DEFAULT 0, " +
+            "FOREIGN KEY (" + COLUMN_USER_ID_FK + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_USER_ID + "))";
+
+    private static final String CREATE_FLASHCARD_CONTENT_TABLE = "CREATE TABLE " + TABLE_FLASHCARD_CONTENT + " (" +
+            COLUMN_CONTENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_FLASHCARD_ID_FK + " INTEGER, " +
+            COLUMN_QUESTION + " TEXT NOT NULL, " +
+            COLUMN_ANSWER + " TEXT, " +
+            "FOREIGN KEY (" + COLUMN_FLASHCARD_ID_FK + ") REFERENCES " + TABLE_FLASHCARD + "(" + COLUMN_FLASHCARD_ID + "))";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -10,49 +55,16 @@ public class DatabaseHelper extends SQLiteOpenHelper { private static final Stri
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_USERS + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_USERNAME + " TEXT UNIQUE, " +
-                COLUMN_PASSWORD + " TEXT, " +
-                COLUMN_EMAIL + " TEXT UNIQUE)";
-        db.execSQL(createTable);
+        db.execSQL(CREATE_USERS_TABLE);
+        db.execSQL(CREATE_FLASHCARD_TABLE);
+        db.execSQL(CREATE_FLASHCARD_CONTENT_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FLASHCARD_CONTENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FLASHCARD);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         onCreate(db);
     }
-
-    public boolean addUser(String password, String email) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_PASSWORD, password);
-        values.put(COLUMN_EMAIL, email);
-        long result = db.insert(TABLE_USERS, null, values);
-        db.close();
-        return result != -1;
-    }
-
-    public boolean checkUser(String username, String password) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{COLUMN_ID},
-                COLUMN_USERNAME + "=? AND " + COLUMN_PASSWORD + "=?",
-                new String[]{username, password}, null, null, null);
-        int count = cursor.getCount();
-        cursor.close();
-        db.close();
-        return count > 0;
-    }
-
-    public boolean checkGoogleUser(String email) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USERS, new String[]{COLUMN_ID},
-                COLUMN_EMAIL + "=?", new String[]{email}, null, null, null);
-        int count = cursor.getCount();
-        cursor.close();
-        db.close();
-        return count > 0;
-    }
-
 }
