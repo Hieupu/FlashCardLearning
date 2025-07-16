@@ -1,5 +1,6 @@
 package com.example.flashcardlearningapp.Activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,8 +11,9 @@ import com.example.flashcardlearningapp.Database.DatabaseHelper;
 import com.example.flashcardlearningapp.R;
 
 public class RegisterActivity extends AppCompatActivity {
-    private EditText etEmail, etPassword, etUsername;
-    private Button btnRegister;
+
+    private EditText editTextEmail, editTextPassword, editTextConfirmPassword;
+    private Button buttonRegister;
     private DatabaseHelper dbHelper;
 
     @Override
@@ -19,44 +21,42 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        etEmail = findViewById(R.id.etEmail);
-        etPassword = findViewById(R.id.etPassword);
-        etUsername = findViewById(R.id.etUsername);
-        btnRegister = findViewById(R.id.btnRegister);
         dbHelper = new DatabaseHelper(this);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
+        buttonRegister = findViewById(R.id.buttonRegister);
 
-        btnRegister.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
-            String username = etUsername.getText().toString().trim();
+        buttonRegister.setOnClickListener(v -> {
+            String email = editTextEmail.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
+            String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Kiểm tra xem email đã tồn tại chưa (dành cho Google hoặc email trùng)
-            if (dbHelper.checkGoogleUser(email)) {
-                Toast.makeText(this, "Email đã được sử dụng", Toast.LENGTH_SHORT).show();
+            if (!password.equals(confirmPassword)) {
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Kiểm tra xem username đã tồn tại chưa
-            if (dbHelper.checkUser(username, "")) {
-                Toast.makeText(this, "Username đã tồn tại", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            // Insert user into database
+            ContentValues values = new ContentValues();
+            values.put(DatabaseHelper.COLUMN_USER_MAIL, email);
+            values.put(DatabaseHelper.COLUMN_PASSWORD, password);
 
-            // Đăng ký người dùng
-            boolean success = dbHelper.addUser(password, email, username);
-            if (success) {
-                Toast.makeText(this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, Login.class)); // chuyển sang màn hình login
+            long result = dbHelper.getWritableDatabase().insert(
+                    DatabaseHelper.TABLE_USERS, null, values);
+
+            if (result != -1) {
+                Toast.makeText(this, "Registration successful", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(RegisterActivity.this, Login.class));
                 finish();
             } else {
-                Toast.makeText(this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Registration failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
 }
-

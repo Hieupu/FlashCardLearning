@@ -1,93 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F8F8">
+    android:padding="16dp"
+    android:background="#FAFAFA">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="32dp"
-        android:gravity="center_horizontal">
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp">
 
-        <!-- Avatar -->
-<!--        <ImageView-->
-<!--            android:id="@+id/imgAvatar"-->
-<!--            android:layout_width="100dp"-->
-<!--            android:layout_height="100dp"-->
-<!--            android:src="@drawable/ic_user_avatar"-->
-<!--            android:layout_marginBottom="24dp"-->
-<!--            android:background="@drawable/circle_background"-->
-<!--            android:contentDescription="Avatar"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:padding="10dp" />-->
-
-        <!-- Username -->
-        <TextView
-            android:id="@+id/tvUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Username"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="#333333"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Email -->
-        <TextView
-            android:id="@+id/tvEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email"
-            android:textSize="18sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="24dp" />
-
-        <!-- Password Field -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/bg_input"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <!-- Email -->
+            <TextView
+                android:id="@+id/textViewEmail"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:enabled="false"
-                android:textColor="#000000"
+                android:text="user@example.com"
                 android:textSize="16sp"
-                android:background="@android:color/transparent" />
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:background="@drawable/bg_textview_email"
+                android:focusable="true"
+                android:clickable="true"
+                android:longClickable="true" />
 
-            <ImageView
-                android:id="@+id/ivTogglePassword"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="8dp"
-                android:src="@drawable/ic_eye_closed"
-                android:scaleType="fitCenter"
-                android:contentDescription="Toggle Password Visibility" />
+            <!-- Password input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:hint="Password"
+                app:endIconMode="password_toggle"
+                app:endIconTint="@color/darker_gray"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/darker_gray">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:textSize="16sp"
+                    android:padding="12dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Change password -->
+            <Button
+                android:id="@+id/buttonUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Change Password"
+                android:textAllCaps="false"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="@color/teal_200"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+
+            <!-- Logout -->
+            <Button
+                android:id="@+id/buttonLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textAllCaps="false"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/design_default_color_error"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
         </LinearLayout>
-
-        <!-- Optional: Logout Button -->
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#FF5722"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:layout_marginTop="16dp"
-            android:elevation="3dp" />
-    </LinearLayout>
-</ScrollView>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

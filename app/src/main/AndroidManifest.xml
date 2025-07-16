@@ -7,11 +7,17 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="FLA"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FlashcardLearningApp"
         tools:targetApi="31">
+        <activity
+            android:name=".Activities.FlashcardDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.AddFlashcardSetActivity"
+            android:exported="false" />
         <activity
             android:name=".Activities.HomeActivity"
             android:exported="true">
@@ -20,11 +26,10 @@
         <activity
             android:name=".Activities.Login"
             android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.UserProfileActivity" />
@@ -32,4 +37,5 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
     </application>
+
 </manifest>

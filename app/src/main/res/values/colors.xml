@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="teal_200">#03DAC6</color> <!-- Màu teal nhạt cho button -->
+    <color name="black">#FF000000</color> <!-- Màu đen cho text -->
+    <color name="darker_gray">#FF444444</color> <!-- Màu xám đậm cho viền -->
 </resources>
