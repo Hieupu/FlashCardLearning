@@ -89,14 +89,14 @@ public class Login extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 String email = account.getEmail();
                 Toast.makeText(this, "Welcome: " + email, Toast.LENGTH_SHORT).show();
-                if (userDao.insertUser(email, "google_user") != -1) {
+
+                if (userDao.checkUser(email, "google_user")) {
                     saveSession(email);
                     startMainActivity();
                 } else {
-                    if (userDao.checkUser(email, "google_user")) {
-                        saveSession(email);
-                        startMainActivity();
-                    }
+                userDao.insertUser(email, "google_user");
+                    saveSession(email);
+                    startMainActivity();
                 }
             } catch (ApiException e) {
                 Toast.makeText(this, "Google Sign-In failed: " + e.getStatusCode(), Toast.LENGTH_SHORT).show();

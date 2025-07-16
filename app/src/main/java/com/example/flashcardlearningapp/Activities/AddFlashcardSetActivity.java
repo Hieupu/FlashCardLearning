@@ -3,7 +3,10 @@ package com.example.flashcardlearningapp.Activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.flashcardlearningapp.DAO.FlashcardContentDAO;
@@ -25,6 +30,7 @@ import java.util.Locale;
 
 public class AddFlashcardSetActivity extends AppCompatActivity {
 
+    private static final String TAG = "AddFlashcardSetActivity";
     private EditText etSetTitle;
     private LinearLayout llFlashcardContentContainer;
     private Button btnAddContent, btnSave;
@@ -48,7 +54,6 @@ public class AddFlashcardSetActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         // Cài đặt DAO
         flashcardDAO = new FlashcardDAO(this);
@@ -62,6 +67,7 @@ public class AddFlashcardSetActivity extends AppCompatActivity {
             finish();
             return;
         }
+        Log.d(TAG, "UserId retrieved: " + userId);
 
         // Khởi tạo các view
         etSetTitle = findViewById(R.id.etSetTitle);
@@ -72,11 +78,68 @@ public class AddFlashcardSetActivity extends AppCompatActivity {
         // Thêm một cặp question-answer trống ban đầu
         themTruongNoiDungMoi();
 
-        // Sự kiện nhấp nút "+" để thêm nội dung
-        btnAddContent.setOnClickListener(v -> themTruongNoiDungMoi());
+        // Sự kiện nhấp nút "Thêm"
+        btnAddContent.setOnClickListener(v -> {
+            themTruongNoiDungMoi();
+            Log.d(TAG, "Added new question-answer pair");
+        });
 
-        // Sự kiện nhấp nút lưu
+        // Sự kiện nhấp nút "Lưu"
         btnSave.setOnClickListener(v -> luuBoFlashcard());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        return true; // Đảm bảo menu hiển thị
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.dropdown_menu) {
+            moreOption(findViewById(R.id.dropdown_menu));
+            return true;
+        } else if (id == R.id.user) {
+            Toast.makeText(this, "Bạn đã chọn thông tin người dùng", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void moreOption(View anchor){
+        PopupMenu popupMenu = new PopupMenu(this, anchor);
+        popupMenu.getMenu().add(Menu.NONE, 1, 1, "My Profile");
+        popupMenu.getMenu().add(Menu.NONE, 2, 2, "My Flashcard Set");
+        popupMenu.getMenu().add(Menu.NONE, 3, 3, "Log out");
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case 1:
+                    Toast.makeText(this, "Selected My Profile", Toast.LENGTH_SHORT).show();
+                    return true;
+                case 2:
+                    Toast.makeText(this, "Selected My Flashcard Set", Toast.LENGTH_SHORT).show();
+                    return true;
+                case 3:
+                    Toast.makeText(this, "Selected Log out", Toast.LENGTH_SHORT).show();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear(); // Xóa tất cả dữ liệu session
+                    editor.apply();
+                    Intent intent = new Intent(AddFlashcardSetActivity.this, Login.class);
+                    startActivity(intent);
+                    return true;
+                default:
+                    return false;
+            }
+        });
+
+        // Show the PopupMenu
+        popupMenu.show();
     }
 
     private void themTruongNoiDungMoi() {
@@ -85,7 +148,10 @@ public class AddFlashcardSetActivity extends AppCompatActivity {
         EditText etAnswer = contentView.findViewById(R.id.etAnswer);
         Button btnRemoveContent = contentView.findViewById(R.id.btnRemoveContent);
 
-        btnRemoveContent.setOnClickListener(v -> llFlashcardContentContainer.removeView(contentView));
+        btnRemoveContent.setOnClickListener(v -> {
+            llFlashcardContentContainer.removeView(contentView);
+            Log.d(TAG, "Removed question-answer pair");
+        });
 
         llFlashcardContentContainer.addView(contentView);
     }

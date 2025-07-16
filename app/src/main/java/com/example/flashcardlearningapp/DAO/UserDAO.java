@@ -58,8 +58,8 @@ public class UserDAO {
     }
 
     public int getUserIdByEmailFromSession(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE);
-        String email = sharedPreferences.getString("email", null); // Lấy email từ session
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE);
+        String email = sharedPreferences.getString("userEmail", null); // Lấy email từ session
         if (email == null) {
             return -1; // Trả về -1 nếu không tìm thấy email
         }

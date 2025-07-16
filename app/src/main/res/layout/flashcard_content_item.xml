@@ -10,16 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nhập Câu Hỏi"
-        android:padding="4dp"
-        android:textSize="14sp" />
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:maxLines="2" />
 
     <EditText
         android:id="@+id/etAnswer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Nhập Câu Trả Lời"
-        android:padding="4dp"
-        android:textSize="14sp" />
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:maxLines="2" />
 
     <Button
         android:id="@+id/btnRemoveContent"
@@ -27,6 +29,7 @@
         android:layout_height="wrap_content"
         android:text="Xóa"
         android:layout_gravity="end"
-        android:padding="4dp" />
+        android:padding="4dp"
+        android:layout_marginTop="4dp" />
 
 </LinearLayout>
