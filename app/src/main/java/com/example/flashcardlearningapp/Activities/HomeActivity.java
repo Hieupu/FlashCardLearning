@@ -119,7 +119,8 @@ public class HomeActivity extends AppCompatActivity {
     public void moreOption(View anchor){
         PopupMenu popupMenu = new PopupMenu(this, anchor);
         popupMenu.getMenu().add(Menu.NONE, 1, 1, "My Flashcard Set");
-        popupMenu.getMenu().add(Menu.NONE, 1, 2, "Log out");
+        popupMenu.getMenu().add(Menu.NONE, 2, 2, "Log out");
+        popupMenu.getMenu().add(Menu.NONE, 3, 3, "Take Quiz");
 
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
@@ -134,6 +135,10 @@ public class HomeActivity extends AppCompatActivity {
                     Intent logoutIntent = new Intent(HomeActivity.this, Login.class);
                     startActivity(logoutIntent);
                     finish();
+                    return true;
+                case 3:
+                    Intent quizIntent = new Intent(HomeActivity.this, QuizActivity.class);
+                    startActivity(quizIntent);
                     return true;
                 default:
                     return false;
