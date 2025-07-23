@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation ("com.google.android.material:material:1.9.0")
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.animation.core.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

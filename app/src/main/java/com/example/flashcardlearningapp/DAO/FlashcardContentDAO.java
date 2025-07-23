@@ -27,10 +27,23 @@ public class FlashcardContentDAO {
 
     public Cursor getContentByFlashcardId(int flashcardId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] columns = {DatabaseHelper.COLUMN_CONTENT_ID, DatabaseHelper.COLUMN_QUESTION, DatabaseHelper.COLUMN_ANSWER};
+        String[] columns = {
+                DatabaseHelper.COLUMN_CONTENT_ID,
+                DatabaseHelper.COLUMN_FLASHCARD_ID_FK,
+                DatabaseHelper.COLUMN_QUESTION,
+                DatabaseHelper.COLUMN_ANSWER
+        };
         String selection = DatabaseHelper.COLUMN_FLASHCARD_ID_FK + "=?";
         String[] selectionArgs = {String.valueOf(flashcardId)};
-        return db.query(DatabaseHelper.TABLE_FLASHCARD_CONTENT, columns, selection, selectionArgs, null, null, null);
+        return db.query(
+                DatabaseHelper.TABLE_FLASHCARD_CONTENT,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
     }
 
     public int deleteContent(int contentId) {

@@ -113,16 +113,13 @@ public class AddFlashcardSetActivity extends AppCompatActivity {
 
     public void moreOption(View anchor){
         PopupMenu popupMenu = new PopupMenu(this, anchor);
-        popupMenu.getMenu().add(Menu.NONE, 1, 1, "My Profile");
-        popupMenu.getMenu().add(Menu.NONE, 2, 2, "My Flashcard Set");
+        popupMenu.getMenu().add(Menu.NONE, 1, 1, "My Flashcard Set");
         popupMenu.getMenu().add(Menu.NONE, 3, 3, "Log out");
+        popupMenu.getMenu().add(Menu.NONE, 2, 2, "Take Quiz");
 
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case 1:
-                    Toast.makeText(this, "Selected My Profile", Toast.LENGTH_SHORT).show();
-                    return true;
-                case 2:
                     Toast.makeText(this, "Selected My Flashcard Set", Toast.LENGTH_SHORT).show();
                     return true;
                 case 3:
@@ -130,8 +127,13 @@ public class AddFlashcardSetActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.clear(); // Xóa tất cả dữ liệu session
                     editor.apply();
-                    Intent intent = new Intent(AddFlashcardSetActivity.this, Login.class);
-                    startActivity(intent);
+                    Intent logoutIntent = new Intent(AddFlashcardSetActivity.this, Login.class);
+                    startActivity(logoutIntent);
+                    finish();
+                    return true;
+                case 2:
+                    Intent quizIntent = new Intent(AddFlashcardSetActivity.this, QuizActivity.class);
+                    startActivity(quizIntent);
                     return true;
                 default:
                     return false;
