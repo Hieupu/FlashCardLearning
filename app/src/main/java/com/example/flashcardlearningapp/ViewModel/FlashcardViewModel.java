@@ -89,4 +89,5 @@ public class FlashcardViewModel extends AndroidViewModel {
         }).start();
         return searchResults;
     }
+
 }

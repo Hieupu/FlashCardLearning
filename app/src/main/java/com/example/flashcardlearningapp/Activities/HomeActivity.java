@@ -119,15 +119,15 @@ public class HomeActivity extends AppCompatActivity {
     public void moreOption(View anchor){
         PopupMenu popupMenu = new PopupMenu(this, anchor);
         popupMenu.getMenu().add(Menu.NONE, 1, 1, "My Flashcard Set");
-        popupMenu.getMenu().add(Menu.NONE, 2, 2, "Log out");
-        popupMenu.getMenu().add(Menu.NONE, 3, 3, "Take Quiz");
+        popupMenu.getMenu().add(Menu.NONE, 3, 3, "Log out");
+        popupMenu.getMenu().add(Menu.NONE, 2, 2, "Take Quiz");
 
         popupMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case 1:
                     Toast.makeText(this, "Selected My Flashcard Set", Toast.LENGTH_SHORT).show();
                     return true;
-                case 2:
+                case 3:
                     Toast.makeText(this, "Selected Log out", Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.clear(); // Xóa tất cả dữ liệu session
@@ -136,7 +136,7 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(logoutIntent);
                     finish();
                     return true;
-                case 3:
+                case 2:
                     Intent quizIntent = new Intent(HomeActivity.this, QuizActivity.class);
                     startActivity(quizIntent);
                     return true;
