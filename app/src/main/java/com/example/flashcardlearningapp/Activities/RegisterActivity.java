@@ -61,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
             cursor.close();
-
+            // Insert user into database
             // Insert user into database
             ContentValues values = new ContentValues();
             values.put(DatabaseHelper.COLUMN_USER_MAIL, email);
