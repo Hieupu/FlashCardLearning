@@ -2,6 +2,8 @@ package com.example.flashcardlearningapp.Activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +43,24 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(
+                    DatabaseHelper.TABLE_USERS,
+                    new String[]{DatabaseHelper.COLUMN_USER_MAIL},
+                    DatabaseHelper.COLUMN_USER_MAIL + " = ?",
+                    new String[]{email},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                Toast.makeText(this, "Email is already registered", Toast.LENGTH_SHORT).show();
+                cursor.close();
+                return;
+            }
+            cursor.close();
 
             // Insert user into database
             ContentValues values = new ContentValues();
